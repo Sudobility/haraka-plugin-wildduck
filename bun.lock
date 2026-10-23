@@ -5,32 +5,32 @@
     "": {
       "name": "@sudobility/haraka",
       "dependencies": {
-        "@sudobility/wildduck": "^8.1.37",
+        "@sudobility/wildduck": "^8.1.38",
         "gelf": "2.0.1",
         "haraka-dsn": "1.1.0",
         "ioredis": "5.8.2",
         "libmime": "5.3.7",
         "mailauth": "4.11.0",
-        "mongodb": "^6.20.0",
+        "mongodb": "~6.21.0",
         "nodemailer": "7.0.10",
         "punycode.js": "2.3.1",
         "srs.js": "0.1.0",
       },
       "devDependencies": {
         "@haraka/eslint-config": "2.0.3",
-        "chai": "^6.2.1",
+        "chai": "~6.3.0",
         "eslint": "9.25.1",
         "eslint-config-nodemailer": "1.2.0",
         "eslint-config-prettier": "10.1.8",
         "grunt": "1.6.1",
         "grunt-cli": "1.5.0",
         "grunt-eslint": "24.3.0",
-        "grunt-mocha-test": "^0.13.3",
-        "mocha": "^11.7.5",
+        "grunt-mocha-test": "~0.13.3",
+        "mocha": "~11.8.0",
         "npm-check-updates": "19.1.2",
-        "patch-package": "^8.0.1",
-        "prettier": "^3.6.2",
-        "sinon": "^21.0.0",
+        "patch-package": "~8.0.1",
+        "prettier": "~3.9.10",
+        "sinon": "~21.1.2",
       },
     },
   },
@@ -229,7 +229,7 @@
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 
-    "@sudobility/wildduck": ["@sudobility/wildduck@8.1.37", "https://npm.pkg.github.com/download/@sudobility/wildduck/8.1.37/16136984f86d740c708f2d7b1705e7ad987ccb01", { "dependencies": { "@fidm/x509": "1.2.1", "@opensearch-project/opensearch": "3.5.1", "@phc/pbkdf2": "1.1.14", "@postalsys/vmc": "1.1.2", "@root/acme": "3.1.0", "@root/csr": "0.8.1", "accesscontrol": "2.2.1", "axios": "1.13.2", "base32.js": "0.1.0", "bcryptjs": "3.0.3", "bson": "6.10.4", "bullmq": "5.63.0", "fido2-lib": "3.5.4", "gelf": "2.0.1", "generate-password": "1.7.1", "hash-wasm": "4.12.0", "he": "1.2.0", "html-to-text": "9.0.5", "humanname": "0.2.2", "iconv-lite": "0.7.0", "ioredfour": "1.3.0-ioredis-07", "ioredis": "5.8.2", "ipaddr.js": "2.2.0", "isemail": "3.2.0", "joi": "18.0.1", "js-yaml": "4.1.0", "key-fingerprint": "1.1.0", "libbase64": "1.3.0", "libmime": "5.3.7", "libqp": "2.1.1", "logic-query-parser": "0.0.5", "mailauth": "4.11.0", "mailsplit": "5.4.6", "mobileconfig": "2.4.0", "mongo-cursor-pagination": "9.1.1", "mongodb": "^6.20.0", "mongodb-extended-json": "1.11.1", "msgpack5": "6.0.2", "node-forge": "1.3.1", "node-html-parser": "7.0.1", "nodemailer": "7.0.10", "npmlog": "7.0.1", "openpgp": "6.2.2", "patch-package": "^8.0.1", "pem-jwk": "2.0.0", "punycode.js": "2.3.1", "pwnedpasswords": "1.0.6", "qrcode": "1.5.4", "restify": "11.1.0", "restify-cors-middleware2": "2.2.1", "restify-errors": "8.1.0", "restify-logger": "2.0.1", "restifyapigenerate": "1.2.4", "search-string": "4.1.0", "seq-index": "1.1.0", "smtp-server": "3.16.1", "speakeasy": "2.0.0", "undici": "7.16.0", "unix-crypt-td-js": "1.1.4", "unixcrypt": "1.2.0", "wild-config": "1.7.1", "ws": "^8.14.0", "yargs": "18.0.0", "zone-mta": "3.10.3" } }, "sha512-gG+A4FEdKxy617NXyoNSuAFNDVrF0eFdmiZAqcxRxM3jGrXr1DgfrR+8K+JliAIrVrtobB+0PudkzWushgMcYw=="],
+    "@sudobility/wildduck": ["@sudobility/wildduck@8.1.38", "https://npm.pkg.github.com/download/@sudobility/wildduck/8.1.38/d76859e0f993487511d9999af28559daed9b6d24", { "dependencies": { "@fidm/x509": "1.2.1", "@opensearch-project/opensearch": "3.5.1", "@phc/pbkdf2": "1.1.14", "@postalsys/vmc": "1.1.2", "@root/acme": "3.1.0", "@root/csr": "0.8.1", "accesscontrol": "2.2.1", "axios": "1.13.2", "base32.js": "0.1.0", "bcryptjs": "3.0.3", "bson": "6.10.4", "bullmq": "5.63.0", "fido2-lib": "3.5.4", "gelf": "2.0.1", "generate-password": "1.7.1", "hash-wasm": "4.12.0", "he": "1.2.0", "html-to-text": "9.0.5", "humanname": "0.2.2", "iconv-lite": "0.7.0", "ioredfour": "1.3.0-ioredis-07", "ioredis": "5.8.2", "ipaddr.js": "2.2.0", "isemail": "3.2.0", "joi": "18.0.1", "js-yaml": "4.1.0", "key-fingerprint": "1.1.0", "libbase64": "1.3.0", "libmime": "5.3.7", "libqp": "2.1.1", "logic-query-parser": "0.0.5", "mailauth": "4.11.0", "mailsplit": "5.4.6", "mobileconfig": "2.4.0", "mongo-cursor-pagination": "9.1.1", "mongodb": "~6.20.0", "mongodb-extended-json": "1.11.1", "msgpack5": "6.0.2", "node-forge": "1.3.1", "node-html-parser": "7.0.1", "nodemailer": "7.0.10", "npmlog": "7.0.1", "openpgp": "6.2.2", "patch-package": "~8.0.1", "pem-jwk": "2.0.0", "punycode.js": "2.3.1", "pwnedpasswords": "1.0.6", "qrcode": "1.5.4", "restify": "11.1.0", "restify-cors-middleware2": "2.2.1", "restify-errors": "8.1.0", "restify-logger": "2.0.1", "restifyapigenerate": "1.2.4", "search-string": "4.1.0", "seq-index": "1.1.0", "smtp-server": "3.16.1", "speakeasy": "2.0.0", "undici": "7.16.0", "unix-crypt-td-js": "1.1.4", "unixcrypt": "1.2.0", "wild-config": "1.7.1", "ws": "~8.14.0", "yargs": "18.0.0", "zone-mta": "3.10.3" } }, "sha512-1UyeJnFo1q3ewwfJBSJK2e7SLskg3YN8HJwvrefwPr5vSEkfkeSly/h3N3vDXUNL12zL5mnfZwSUxLrRNw1RMQ=="],
 
     "@types/estree": ["@types/estree@1.0.9", "", {}, "sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg=="],
 
@@ -1309,7 +1309,7 @@
 
     "wrappy": ["wrappy@1.0.2", "", {}, "sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ=="],
 
-    "ws": ["ws@8.22.0", "", { "peerDependencies": { "bufferutil": "^4.0.1", "utf-8-validate": ">=5.0.2" }, "optionalPeers": ["bufferutil", "utf-8-validate"] }, "sha512-Ydggc987+RO0AnWtZ/7Wq9FtNvcrL1b/RO0ud9mWjUPgDrsAAwQSF51sm2hm1XofbU/4jkpGEsLFsZZxU+1DOg=="],
+    "ws": ["ws@8.14.2", "", { "peerDependencies": { "bufferutil": "^4.0.1", "utf-8-validate": ">=5.0.2" }, "optionalPeers": ["bufferutil", "utf-8-validate"] }, "sha512-wEBG1ftX4jcglPxgFCMJmZ2PLtSbJ2Peg6TmpJFTbe9GZYOQCDPdMYu/Tm0/bGZkw8paZnJY45J4K2PZrLYq8g=="],
 
     "xmlbuilder": ["xmlbuilder@9.0.7", "", {}, "sha512-7YXTQc3P2l9+0rjaUbLwMKRhtmwg1M1eDf6nag7urC7pIPYLD9W/jmzQ4ptRSUbodw5S0jfoGTflLemQibSpeQ=="],
 
@@ -1346,6 +1346,8 @@
     "@sudobility/wildduck/iconv-lite": ["iconv-lite@0.7.0", "", { "dependencies": { "safer-buffer": ">= 2.1.2 < 3.0.0" } }, "sha512-cf6L2Ds3h57VVmkZe+Pn+5APsT7FpqJtEhhieDCvrE2MK5Qk9MyffgQyuxQTm6BChfeZNtcOLHp9IcWRVcIcBQ=="],
 
     "@sudobility/wildduck/js-yaml": ["js-yaml@4.1.0", "", { "dependencies": { "argparse": "^2.0.1" }, "bin": { "js-yaml": "bin/js-yaml.js" } }, "sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA=="],
+
+    "@sudobility/wildduck/mongodb": ["mongodb@6.20.0", "", { "dependencies": { "@mongodb-js/saslprep": "^1.3.0", "bson": "^6.10.4", "mongodb-connection-string-url": "^3.0.2" }, "peerDependencies": { "@aws-sdk/credential-providers": "^3.188.0", "@mongodb-js/zstd": "^1.1.0 || ^2.0.0", "gcp-metadata": "^5.2.0", "kerberos": "^2.0.1", "mongodb-client-encryption": ">=6.0.0 <7", "snappy": "^7.3.2", "socks": "^2.7.1" }, "optionalPeers": ["@aws-sdk/credential-providers", "@mongodb-js/zstd", "gcp-metadata", "kerberos", "mongodb-client-encryption", "snappy", "socks"] }, "sha512-Tl6MEIU3K4Rq3TSHd+sZQqRBoGlFsOgNrH5ltAcFBV62Re3Fd+FcaVf8uSEQFOJ51SDowDVttBTONMfoYWrWlQ=="],
 
     "@sudobility/wildduck/yargs": ["yargs@18.0.0", "", { "dependencies": { "cliui": "^9.0.1", "escalade": "^3.1.1", "get-caller-file": "^2.0.5", "string-width": "^7.2.0", "y18n": "^5.0.5", "yargs-parser": "^22.0.0" } }, "sha512-4UEqdc2RYGHZc7Doyqkrqiln3p9X2DZVxaGbwhn2pi7MrRagKaOcIKe8L3OxYcbhXLgLFUS3zAYuQjKBQgmuNg=="],
 
@@ -1408,8 +1410,6 @@
     "mongodb-extended-json/bson": ["bson@1.1.6", "", {}, "sha512-EvVNVeGo4tHxwi8L6bPj3y3itEvStdwvvlojVxxbyYfoaxJ6keLgrTuKdyfEAszFK+H3olzBuafE0yoh0D1gdg=="],
 
     "morgan/debug": ["debug@2.6.9", "", { "dependencies": { "ms": "2.0.0" } }, "sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA=="],
-
-    "morgan/on-finished": ["on-finished@2.4.2", "", { "dependencies": { "ee-first": "1.1.1" } }, "sha512-ATWUv387i+nLD49EiDoOft5scf32Vsdz3ktrQJG9bi7jRFmaXTssvyvj1EmeKVVgvesbqUtvQQvaS2TpTukAZQ=="],
 
     "mx-connect/mailauth": ["mailauth@4.8.3", "", { "dependencies": { "@postalsys/vmc": "1.1.0", "fast-xml-parser": "4.5.2", "ipaddr.js": "2.2.0", "joi": "17.13.3", "libmime": "5.3.6", "nodemailer": "6.10.1", "punycode.js": "2.3.1", "tldts": "7.0.1", "undici": "7.8.0", "yargs": "17.7.2" }, "bin": { "mailauth": "bin/mailauth.js" } }, "sha512-FFg4JDUm9fwgpha7ZMjU7MtL4BgeyBLHl5+qvP4PQ60UqCfMZFiaGGNMH8Ck3XUTx1Coo9qby9xEKuuG7KhqYg=="],
 
