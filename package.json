@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/haraka",
-  "version": "8.0.38",
+  "version": "8.0.39",
   "description": "Haraka plugin for processing incoming messages for the WildDuck IMAP server",
   "main": "index.js",
   "scripts": {
