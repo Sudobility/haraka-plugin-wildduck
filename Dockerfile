@@ -1,6 +1,6 @@
 FROM node:lts-alpine AS builder
 
-ARG NPM_TOKEN
+ARG GH_PACKAGES_TOKEN
 
 RUN apk add --no-cache git python3 py3-pip make g++
 
@@ -16,9 +16,12 @@ RUN npm install --omit=dev
 
 COPY . /app/node_modules/haraka-plugin-wildduck
 WORKDIR /app/node_modules/haraka-plugin-wildduck
-RUN echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc && \
+# @sudobility/* now live on GitHub Packages (not npmjs); everything else stays
+# on the default public npm registry. Route the scope and auth with the token.
+RUN echo "@sudobility:registry=https://npm.pkg.github.com" > ~/.npmrc && \
+    echo "//npm.pkg.github.com/:_authToken=${GH_PACKAGES_TOKEN}" >> ~/.npmrc && \
     npm install --omit=dev && \
-    rm -f .npmrc
+    rm -f ~/.npmrc
 
 
 FROM node:lts-alpine AS app
