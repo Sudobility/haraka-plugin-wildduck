@@ -9,40 +9,20 @@
 
 SMTP delivery plugin for Haraka that integrates with the WildDuck mail server. Handles the complete inbound email pipeline: SMTP negotiation, email authentication (SPF/DKIM/DMARC/ARC/BIMI), spam filtering via Rspamd, rate limiting, recipient validation, message forwarding, autoreply generation, and final storage into MongoDB. This is the sole delivery plugin needed -- do not enable Haraka's built-in SPF or dkim_verify plugins alongside it.
 
-- **Package**: `@sudobility/haraka` (v8.0.23)
-- **License**: BUSL-1.1
+- **Package**: `@sudobility/haraka` (fork of upstream `haraka-plugin-wildduck`); see `package.json` for current version
+- **License**: BUSL-1.1 (`LICENSE` is the full Business Source License text)
 - **Runtime**: Node.js >= 16.20.1 (Haraka SMTP daemon)
-- **Package Manager**: npm (not Bun -- `bun.lock` exists but npm is canonical)
+- **Package Manager**: works with npm; `bun.lock` is the committed lockfile (no `package-lock.json`). `@sudobility/*` deps resolve from GitHub Packages via `.npmrc` and need a token with `read:packages`.
 - **Language**: JavaScript (CommonJS, `require`/`exports`)
-- **Repository**: https://github.com/johnqh/haraka-plugin-wildduck
+- **Repository**: https://github.com/Sudobility/haraka-plugin-wildduck
 
 ## Project Structure
 
-```
-haraka-plugin-wildduck/
-├── index.js                    # Main plugin (2024 lines) - all SMTP hooks and processing
-├── lib/
-│   ├── db.js                   # MongoDB/Redis connection management, handler init
-│   ├── auth.js                 # Email auth (SPF/DKIM/ARC/DMARC/BIMI) via mailauth
-│   ├── hooks.js                # Thin Haraka hook wrappers for mail and data_post
-│   └── stream-collect.js       # Transform stream that buffers message chunks
-├── config/
-│   └── wildduck.yaml           # Primary config (DB, rate limits, spam, auth)
-├── test/
-│   ├── index.test.js           # Main plugin function tests
-│   ├── hooks.test.js           # Hook wrapper tests
-│   ├── db.test.js              # DB module interface tests
-│   └── stream-collect.test.js  # StreamCollect tests
-├── patches/
-│   └── http-deceiver+1.2.7.patch  # Node.js v20+ compat patch (postinstall)
-├── .github/workflows/ci-cd.yml    # CI/CD: NPM publish + Docker Hub
-├── Dockerfile                  # Multi-stage: Haraka v3.1.1 + plugin
-├── Gruntfile.js                # Grunt: ESLint + Mocha runner
-├── eslint.config.js            # ESLint flat config (ES2022, Haraka globals)
-├── .prettierrc.js              # 160 width, 4-space, single quotes, LF
-├── ARCHITECTURE.md             # Detailed 500-line architecture guide
-└── package.json                # Package definition and scripts
-```
+Layout is documented in `README.md`. The code is small: `index.js` (~2000 lines)
+holds every SMTP hook and the processing logic; `lib/` has `auth.js` (mailauth
+checks), `db.js` (connections + handler init), `hooks.js` (thin wrappers),
+`stream-collect.js` (chunk-buffering transform stream). `ARCHITECTURE.md` is the
+deep-dive; this file is the quick reference.
 
 ## Key Components
 
@@ -83,20 +63,10 @@ MAX DATA ──► hook_max_data_exceeded()            → GELF oversize denial
 
 ### Database Connections (lib/db.js)
 
-```javascript
-plugin.db = {
-    database: MongoClient,          // Main message DB (wildduck)
-    users: MongoClient,             // User accounts (can be separate)
-    gridfs: MongoClient,            // Attachment storage (GridFS)
-    senderDb: MongoClient,          // Outbound queue (zone-mta)
-    redis: RedisClient,             // Rate limiting counters
-    userHandler: UserHandler,       // User/address resolution
-    messageHandler: MessageHandler, // Message storage/retrieval
-    settingsHandler: SettingsHandler // Global settings
-}
-// Also: plugin.ttlcounter, plugin.ttlcounterAsync, plugin.maildrop,
-//        plugin.filterHandler, plugin.bimiHandler
-```
+`open_database` populates `plugin.db` with Mongo clients (`database`, `users`,
+`gridfs`, `senderDb`), the `redis` client, and the WildDuck handlers
+(`userHandler`, `messageHandler`, `settingsHandler`). Also set on `plugin`:
+`ttlcounter`/`ttlcounterAsync`, `maildrop`, `filterHandler`, `bimiHandler`.
 
 Connection retry: MongoDB reconnects every 2 seconds on failure. RCPT hook retries 5 times with 8s hard timeout.
 
@@ -114,28 +84,12 @@ Keys accumulate in `txn.notes.rateKeys[]` and batch-update via `updateRateLimits
 
 ### Transaction Context (txn.notes)
 
-```javascript
-txn.notes = {
-    id: ObjectId,                    // Transaction ID
-    sender: 'from@example.com',      // MAIL FROM
-    transmissionType: 'ESMTPS',      // E? + SMTP + S? (EHLO/TLS)
-    rejectCode: 'CODE',              // For GELF logging
-
-    // Auth results from lib/auth.js
-    spfResult, dkimResult, arcResult, dmarcResult, bimiResult,
-
-    // Recipient tracking
-    targets: {
-        users: Map,                  // userId -> {userData, recipient}
-        forwards: Map,               // targetValue -> {type, value, recipient}
-        recipients: Set,             // All normalized addresses
-        autoreplies: Map,            // addrview -> addressData
-        forwardCounters: Map         // addressId -> {increment, limit}
-    },
-    rateKeys: [],                    // {selector, key, limit} for post-delivery increment
-    settings: { 'const:max:storage', 'const:max:recipients', 'const:max:forwards' }
-};
-```
+Cross-hook state lives on `txn.notes`, initialized in `init_wildduck_transaction()`:
+`id`, `sender`, `transmissionType`, `rejectCode`; the auth results
+(`spfResult`/`dkimResult`/`arcResult`/`dmarcResult`/`bimiResult`); `targets`
+(Maps `users`, `forwards`, `autoreplies`, `forwardCounters` + a `recipients`
+Set); `rateKeys[]` (`{selector,key,limit}` for post-delivery increment); and
+`settings` (`const:max:storage`/`recipients`/`forwards`).
 
 ### Spam Filtering (Rspamd)
 
@@ -159,17 +113,20 @@ Autoreply conditions: `autoreply.status` truthy, current time within start/end w
 npm install              # Install deps (patch-package runs via postinstall)
 npm run lint             # ESLint on index.js and lib/
 npm run lint:fix         # Auto-fix ESLint issues
-npm test                 # ESLint + Mocha tests via Grunt
-npm run update           # rm node_modules, ncu -u, npm install
+npm run test:unit        # Grunt default: ESLint + Mocha (44 tests). NOTE: there is NO `npm test` script
+npx grunt test           # Mocha only (skip lint)
+npm run update           # rm node_modules + package-lock.json, ncu -u, npm install
 ```
 
-**Tests**: Mocha + Chai (expect) + Sinon. Files in `test/**/*.test.js`. Mock Haraka connection/transaction objects; no live DB needed.
+**Tests**: Mocha + Chai (`expect`) + Sinon. Files in `test/**/*.test.js`. Mock Haraka connection/transaction objects; no live DB needed. Runner is Grunt (`Gruntfile.js`): default task = eslint + mochaTest; `test` task = mochaTest only.
 
-**Code style**: Prettier (160 chars, 4-space, single quotes, LF). Haraka globals (`OK`, `DENY`, `DENYSOFT`, etc.) injected at runtime, declared in eslint.config.js.
+**ESLint**: ESLint 9 uses the flat config `eslint.config.js` (ES2022, CommonJS, Haraka globals `OK`/`DENY`/`DENYSOFT`/… declared there). The legacy `.eslintrc` is not used by ESLint 9.
 
-**Docker**: Multi-stage build cloning Haraka v3.1.1. Requires `NPM_TOKEN` build arg for `@sudobility` packages.
+**Code style**: Prettier (160 chars, 4-space, single quotes, LF, no trailing comma, avoid arrow parens).
 
-**CI/CD**: GitHub Actions on push/PR to main/develop. Shared workflow from `johnqh/workflows`.
+**Docker**: Multi-stage build cloning Haraka v3.1.1 and copying this repo into its `node_modules`. Requires a `GH_PACKAGES_TOKEN` build arg (writes a temp `~/.npmrc`) to pull `@sudobility` packages from GitHub Packages.
+
+**CI/CD**: `.github/workflows/ci-cd.yml` runs on push/PR to `main`/`develop`, delegating to the reusable `johnqh/workflows/.github/workflows/unified-cicd.yml@main` (`publish-target: github`, `docker-image-name: haraka`).
 
 ## Architecture Patterns
 
@@ -187,33 +144,13 @@ npm run update           # rm node_modules, ncu -u, npm install
 
 **WildDuck config disabled**: `process.env.DISABLE_WILD_CONFIG = 'true'` at module load prevents WildDuck from loading its own configs.
 
-## Common Tasks
+## Common Tasks (where to edit)
 
-### Adding a New Authentication Check
-1. Add logic in `lib/auth.js` in `hookMail()` (envelope) or `hookDataPost()` (body)
-2. Store result in `txn.notes.{check}Result`
-3. Add header via `connection.auth_results(result.info)`
-4. Log metrics via `plugin.loggelf()` with `_mail_action`
-
-### Adding a New SMTP Hook
-1. Export `exports.hook_{name}` in `index.js` (auto-discovered)
-2. Initialize state in `init_wildduck_transaction()` if needed
-3. Use `txn.notes` for cross-hook state; call `next()` with response
-
-### Modifying Rate Limits
-1. Update `config/wildduck.yaml` `limits` section
-2. For new dimension: add `checkRateLimit()` call in `real_rcpt_handler()`, push to `txn.notes.rateKeys`
-3. Config keys: `limits.{selector}` (limit), `limits.{selector}WindowSize` (window)
-
-### Modifying Recipient Handling
-1. Edit `real_rcpt_handler()` in index.js
-2. New address types: branch after `resolveAddress()` callback
-3. Store in `txn.notes.targets.users` or `.forwards`; set `txn.notes.rejectCode` before reject
-
-### Modifying Message Storage
-1. Storage in `storeMessages()` within `hook_queue()`
-2. `FilterHandler.storeMessage()` accepts `meta`, `verificationResults`, `chunks`, `mailbox`
-3. `prepared` object (mimeTree + maildata) reused across recipients for efficiency
+- **New auth check**: add to `lib/auth.js` (`hookMail` envelope / `hookDataPost` body); store on `txn.notes.{check}Result`; emit header via `connection.auth_results()`; log via `plugin.loggelf()`.
+- **New SMTP hook**: add `exports.hook_{name}` in `index.js` (auto-discovered); init any state in `init_wildduck_transaction()`.
+- **Rate limits**: edit `config/wildduck.yaml` `limits`; new dimension = a `checkRateLimit()` call in `real_rcpt_handler()` pushing to `txn.notes.rateKeys`.
+- **Recipient handling**: `real_rcpt_handler()` in `index.js`, branching after the `resolveAddress()` callback; set `txn.notes.rejectCode` before rejecting.
+- **Message storage**: `storeMessages()` inside `hook_queue()`; the `prepared` object (mimeTree + maildata) is reused across recipients.
 
 ## Error Codes
 
