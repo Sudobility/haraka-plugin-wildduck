@@ -1,7 +1,5 @@
 FROM node:lts-alpine AS builder
 
-ARG GH_PACKAGES_TOKEN
-
 RUN apk add --no-cache git python3 py3-pip make g++
 
 WORKDIR /app
@@ -18,8 +16,12 @@ COPY . /app/node_modules/haraka-plugin-wildduck
 WORKDIR /app/node_modules/haraka-plugin-wildduck
 # @sudobility/* now live on GitHub Packages (not npmjs); everything else stays
 # on the default public npm registry. Route the scope and auth with the token.
-RUN echo "@sudobility:registry=https://npm.pkg.github.com" > ~/.npmrc && \
-    echo "//npm.pkg.github.com/:_authToken=${GH_PACKAGES_TOKEN}" >> ~/.npmrc && \
+# Token via BuildKit secret (never a build-arg or an image layer). CI passes it
+# via docker/build-push-action `secrets:`; locally:
+#   docker build --secret id=gh_packages_token,env=GH_PACKAGES_READ_TOKEN
+RUN --mount=type=secret,id=gh_packages_token \
+    printf '@sudobility:registry=https://npm.pkg.github.com\n//npm.pkg.github.com/:_authToken=%s\n' \
+      "$(cat /run/secrets/gh_packages_token)" > ~/.npmrc && \
     npm install --omit=dev && \
     rm -f ~/.npmrc
 
