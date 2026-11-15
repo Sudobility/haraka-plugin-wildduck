@@ -22,7 +22,7 @@ permissions:
 
 jobs:
   cicd:
-    uses: johnqh/workflows/.github/workflows/unified-cicd.yml@main
+    uses: Sudobility/workflows/.github/workflows/unified-cicd.yml@main
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
